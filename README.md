@@ -11,12 +11,6 @@ This template makes it easier for all developers to get started with their first
 
 If you have any questions about the SDK, join our [Discord](https://discord.gg/7e3QN3Hy64) to get help!
 
-## Screenshot
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/spling-labs/social-protocol-react-native-template/main/assets/screenshot.png" />
-</div>
-
 ## Get started
 
 Clone the project:
@@ -43,3 +37,9 @@ Run app on ios device/emulator:
 ```shell
 npm run ios
 ```
+
+## Screenshot
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/spling-labs/social-protocol-react-native-template/main/assets/screenshot.png" height="500"/>
+</div>
