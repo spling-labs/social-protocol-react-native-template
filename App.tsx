@@ -40,61 +40,48 @@ const App = () => {
   const [loading, setLoading] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
 
-  const loadPosts = async () => {
-    if (socialProtocol !== undefined) {
-      try {
-        setLoading(true)
-
-        const newPosts: Post[] = await socialProtocol.getAllPosts(1, 20, (page - 1) * 20, Order_By.Desc)
-        if (newPosts.length === 0) setEndOfList(true)
-        setPosts([...posts, ...newPosts])
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false)
-        setRefreshing(false)
-      }
-    }
-  }
-
+  // Initiliaze the Social Protocol.
   useEffect(() => {
-    const initializeSocialProtocol = async () => {
-      try {
-        const protocolOptions = { useIndexer: true } as ProtocolOptions
-        const socialProtocol: SocialProtocol = await new SocialProtocol(Keypair.generate(), null, protocolOptions).init()
-        setSocialPorotcol(socialProtocol)
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
     const runCode = async () => {
-      setPosts([])
-      setPage(1)
-      setEndOfList(false)
-      setLoading(true)
-
-      await initializeSocialProtocol()
-      await loadPosts()
+      const keyPair = Keypair.generate()
+      const socialProtocol = await new SocialProtocol(keyPair, null, { useIndexer: true } as ProtocolOptions).init()
+      setSocialPorotcol(socialProtocol)
     }
     runCode()
   }, [])
 
+  // Trigger load posts.
+  useEffect(() => {
+    const loadPosts = async () => {
+      if (socialProtocol !== undefined) {
+        try {
+          setLoading(true)
+
+          const newPosts: Post[] = await socialProtocol.getAllPosts(1, 20, (page - 1) * 20, Order_By.Desc)
+          if (newPosts.length === 0) setEndOfList(true)
+          setPosts([...posts, ...newPosts])
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false)
+          setRefreshing(false)
+        }
+      }
+    }
+    loadPosts()
+  }, [socialProtocol, page])
+
   const handleLoadMorePosts = () => {
     if (!loading && !endOfList) {
       setPage(page + 1);
-      loadPosts();
     }
   };
 
   const onRefresh = async () => {
     setRefreshing(true)
     setPosts([])
-    setPage(1)
     setEndOfList(false)
-    setLoading(true)
-
-    await loadPosts()
+    setPage(1)
   };
 
 
@@ -118,7 +105,7 @@ const App = () => {
         />
 
         <View style={{ flexDirection: "row", alignItems: "center", margin: 10 }}>
-          <Text style={{ flex: 1, fontSize: 28, fontWeight: 'bold' }}>Feed</Text>
+          <Text style={{ flex: 1, fontSize: 28, fontWeight: 'bold', color: 'white' }}>Feed</Text>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
               onPress={() => { Linking.openURL('https://wa.me/31653742901') }}
@@ -167,7 +154,12 @@ const App = () => {
               {loading && !refreshing &&
                 <>
                   <ActivityIndicator size="large" color="#32283b" />
-                  <Text>Loading...</Text>
+                  <Text style={{ color: 'white' }}>Loading...</Text>
+                </>
+              }
+              {!loading && !refreshing && endOfList &&
+                <>
+                  <Text style={{ color: 'white' }}>You have reached the end of the list! 🚀</Text>
                 </>
               }
             </View>

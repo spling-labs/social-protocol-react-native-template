@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
         borderRadius: 50 / 2
     },
     username: {
+        color: 'white',
         fontWeight: 'bold',
         fontSize: 15,
     },
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     postText: {
+        color: 'white',
         marginTop: 10,
         fontSize: 14
     },
@@ -104,6 +106,7 @@ const styles = StyleSheet.create({
         borderRadius: 15
     },
     postTag: {
+        color: 'white',
         fontSize: 10,
         paddingTop: 5,
         paddingBottom: 5,
